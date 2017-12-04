@@ -31,15 +31,37 @@
         if (SelectedData.selectedWeight !== null) {
             vm.selectedWeight = SelectedData.selectedWeight;
         }
+        
+        
+        var lat =0;
+        var lon =0;
+        
+        /*global navigator*/
+        
+
+        
+
+
 
         //refactored for Angular 1.6 - removed success/error, used Promises...
         vm.getDepartureWeather = function() {
             
-            var lat = "35.221997";
-            console.log(lat);
-            var lon = "-101.831297";
-            console.log(lon);            
-
+            if(navigator.geolocation){
+                    navigator.geolocation.getCurrentPosition(showLocation);
+                }else{
+                    console.log('Geolocation is not supported by this browser.');
+                }
+            
+            //var lat = "35.221997";
+            //console.log(lat);
+            //var lon = "-101.831297";
+            //console.log(lon);            
+            function showLocation(position){
+            lat = position.coords.latitude;
+            console.log("latitude: " + lat);
+            lon = position.coords.longitude;
+            console.log("longitude: " + lon);
+        
             DarkskyWeather.getWeather(lat, lon)
                 .then(function(response) {
                     vm.departureWeather = response.data;
@@ -49,7 +71,7 @@
                     console.log(e);
                 });
         }
-
+        }
         //refactored for Angular 1.6 - removed success/error, used Promises...        
         /*vm.getArrivalWeather = function() {
             
